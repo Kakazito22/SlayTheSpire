@@ -31,7 +31,7 @@ public class CardSystem : Singleton<CardSystem>
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostRaction, ReactionTiming.POST);
     }
 
-    #region Public方法
+#region Public方法
     public void SetUp(List<CardData> deck)
     {
         foreach (var data in deck)
@@ -40,7 +40,7 @@ public class CardSystem : Singleton<CardSystem>
             drawPile.Add(card);
         }
     }
-    #endregion
+#endregion
     
 #region Performers->执行者
     private IEnumerator DrawCardsPerformer(DrawCardsGA action)
@@ -70,20 +70,26 @@ public class CardSystem : Singleton<CardSystem>
         }
         hand.Clear();
     }
-    private IEnumerator PlayCardPerformer(PlayCardGA action)
+    private IEnumerator PlayCardPerformer(PlayCardGA playCardGA)
     {
-        Card card = action.Card;
+        Card card = playCardGA.Card;
         if (hand.Contains(card))
         {
             hand.Remove(card);
             discardPile.Add(card);
             CardView cardView = handView.RemoveCard(card);
             yield return DiscardCard(cardView);
-            // todo: 执行卡牌的效果
-        }
-        else
-        {
-            Debug.LogWarning($"Card {card.Title} is not in hand.");
+            
+            // 扣除卡牌的费用
+            SpendManaGA spendManaGa = new SpendManaGA(card.Mana);
+            ActionSystem.Instance.AddReaction(spendManaGa);
+            
+            // 执行卡牌的效果
+            foreach (var effect in card.Effects)
+            {
+                PerformEffectGA effectGa = new PerformEffectGA(effect);
+                ActionSystem.Instance.AddReaction(effectGa);
+            }
         }
     }
 #endregion

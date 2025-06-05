@@ -61,7 +61,9 @@ public class CardView : MonoBehaviour
     private void OnMouseUp()
     {
         if(!Interactions.Instance.PlayerCanInteract()) return;
-        if(Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
+        // 如果玩家法力充足且正在拖拽卡牌至 DropArea，则打出卡牌
+        if( ManaSystem.Instance.HasEnoughMana(Card.Mana) &&
+            Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f, dropLayer))
         {
             // play card
             PlayCardGA playCardGA = new PlayCardGA(Card);
