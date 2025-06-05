@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// 卡牌视图类
+/// </summary>
 public class CardView : MonoBehaviour
 {
     [SerializeField] private TMP_Text txtMana;
@@ -43,9 +46,8 @@ public class CardView : MonoBehaviour
         Interactions.Instance.PlayerIsDragging = true;
         wrapper.SetActive(true);
         CardViewHoverSystem.Instance.Hide();
-        var transform1 = transform;
-        dragBeginPos = transform1.position;
-        dragBeginRot = transform1.rotation;
+        dragBeginPos = transform.position;
+        dragBeginRot = transform.rotation;
         transform.rotation = Quaternion.Euler(0,0,0);
         transform.position = MouseUtil.GetMouseWorldPosition(-1);
     }

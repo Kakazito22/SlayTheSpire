@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.Splines;
 using DG.Tweening;
 
+/// <summary>
+/// 手牌视图
+/// </summary>
 public class HandView : MonoBehaviour
 {
     [SerializeField] private SplineContainer splineContainer;
@@ -34,6 +37,7 @@ public class HandView : MonoBehaviour
         if (cards.Count == 0) yield break;
 
         Spline spline = splineContainer.Spline;
+        // todo:这里现在是设定的手牌上限为10张
         float step = 1f / 10f;
         float firstCardPosition = 0.5f - (cards.Count - 1) * step / 2f;
         for (int i = 0; i < cards.Count; i++)

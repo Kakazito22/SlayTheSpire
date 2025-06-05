@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -17,6 +16,7 @@ public class CardSystem : Singleton<CardSystem>
         ActionSystem.AttachPerformer<DrawCardsGA>(DrawCardsPerformer);
         ActionSystem.AttachPerformer<DiscardAllCardsGA>(DiscardAllCardsPerformer);
         ActionSystem.AttachPerformer<PlayCardGA>(PlayCardPerformer);
+        
         ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPreRaction, ReactionTiming.PRE);
         ActionSystem.SubscribeReaction<EnemyTurnGA>(EnemyTurnPostRaction, ReactionTiming.POST);
     }
@@ -26,6 +26,7 @@ public class CardSystem : Singleton<CardSystem>
         ActionSystem.DetachPerformer<DrawCardsGA>();
         ActionSystem.DetachPerformer<DiscardAllCardsGA>();
         ActionSystem.DetachPerformer<PlayCardGA>();
+        
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPreRaction, ReactionTiming.PRE);
         ActionSystem.UnsubscribeReaction<EnemyTurnGA>(EnemyTurnPostRaction, ReactionTiming.POST);
     }
@@ -109,14 +110,13 @@ public class CardSystem : Singleton<CardSystem>
         CardView cardView = CardViewCreator.Instance.CreateCardView(card, drawPilePoint.position, drawPilePoint.rotation);
         yield return handView.AddCard(cardView);
     }
-
     // 补充牌库
     private void RefillDeck()
     {
         drawPile.AddRange(discardPile);
         discardPile.Clear();
     }
-
+    // 丢弃一张牌
     private IEnumerator DiscardCard(CardView cardView)
     {
         cardView.transform.DOScale(Vector3.zero, 0.15f);
